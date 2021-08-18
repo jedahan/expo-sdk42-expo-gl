@@ -8,7 +8,6 @@ import {
   GridHelper,
   Mesh,
   MeshPhongMaterial,
-  MeshStandardMaterial,
   PerspectiveCamera,
   PointLight,
   Scene,
@@ -24,11 +23,7 @@ export function Globe() {
   const [camera, setCamera] = React.useState<PerspectiveCamera | null>()
 
   // Clear the animation loop when the component unmounts
-  React.useEffect(() => {
-    return () => clearTimeout(timeout)
-  }, [])
-
-  let hasSetup = false
+  React.useEffect(() => () => void clearTimeout(timeout), [])
 
   return (
     <OrbitControlsView style={{ flex: 1 }} camera={camera} ref={orbitControlsRef}>
@@ -65,32 +60,26 @@ export function Globe() {
           camera.add(spotLight)
 
           function update() {
-            orbitControlsRef?.current?.getControls()?.update()
-          }
-
-          function setupOrbitControls() {
             const controls = orbitControlsRef?.current?.getControls()
-            if (!hasSetup && controls) {
-              controls.autoRotate = true
-              controls.autoRotateSpeed = 1.1
-              controls.minPolarAngle = Math.PI * 0.2
-              controls.maxPolarAngle = Math.PI * 0.6
-              controls.enableDamping = true
-              controls.autoRotate = true
-              controls.enablePan = false
-              controls.maxDistance = 10
-              controls.minDistance = 10
-              controls.dampingFactor = 0.04
-              controls.rotateSpeed = 2
-              hasSetup = true
-            }
+            controls?.update()
+            if (controls?.setup) return
+            controls.autoRotate = true
+            controls.autoRotateSpeed = 1.1
+            controls.minPolarAngle = Math.PI * 0.2
+            controls.maxPolarAngle = Math.PI * 0.6
+            controls.enableDamping = true
+            controls.autoRotate = true
+            controls.enablePan = false
+            controls.maxDistance = 10
+            controls.minDistance = 10
+            controls.dampingFactor = 0.04
+            controls.rotateSpeed = 2
+            controls.setup = true
           }
 
-          // Setup an animation loop
           const render = () => {
             timeout = requestAnimationFrame(render)
             update()
-            setupOrbitControls()
             renderer.render(scene, camera)
             gl.endFrameEXP()
           }

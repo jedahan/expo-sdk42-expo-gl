@@ -4,6 +4,7 @@
     "start": "expo start",
     "build": "eas build --platform android --profile release",
     "android": "expo start --android",
+    "lint": "tsc",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
