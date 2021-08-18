@@ -1,8 +1,7 @@
-Error building a project with expo-gl, on EAS
+Error rendering a globe when it is in a drawer
 
-Local steps to reproduce:
+The globe does not work on production android builds, but does work fine in
 
-    expo init --npm --yes
-    expo install expo-gl expo-three react-native-unimodules # not sure if all three are needed
-    $EDITOR App.js # import and instantiate <GLView />, not sure if needed
-    npm run build # eas build --platform android --profile release
+  - Expo Go on Android
+  - Expo Go on iOS
+  - Production iOS ipa
