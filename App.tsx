@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useWindowDimensions, View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -45,16 +45,14 @@ export default function App() {
 }
 
 function Globe() {
-  let timeout: number
-
-  // Clear the animation loop when the component unmounts
-  React.useEffect(() => () => void clearTimeout(timeout), [])
+  let contextCreate = 0
 
   return (
     <View style={{ flex: 1 }}>
       <GLView
         style={{ flex: 1 }}
         onContextCreate={(gl: ExpoWebGLRenderingContext) => {
+          console.log(`onContextCreate ${++contextCreate}`)
           const { drawingBufferWidth: width, drawingBufferHeight: height } = gl
           const sceneColor = 0x667788
 
@@ -79,8 +77,14 @@ function Globe() {
           camera.add(spotLight)
           scene.add(camera)
 
+          let lastLogDate = Date.now()
+          let logCount = 0
           const render = () => {
-            timeout = requestAnimationFrame(render)
+            if (Date.now() - lastLogDate >= 6 * 1000) {
+              console.log(`render ${++logCount}`)
+              lastLogDate = Date.now()
+            }
+            requestAnimationFrame(render)
             earth.rotation.x += 0.005
             earth.rotation.y += 0.0025
             renderer.render(scene, camera)
