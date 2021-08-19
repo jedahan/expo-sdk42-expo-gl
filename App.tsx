@@ -32,7 +32,11 @@ export default function App() {
 
   if (!mapReady) return null
 
-  return Globe(map)
+  if (!map.image.data.localUri.endsWith(map.image.data.type))
+    map.image.data.localUri += `.${map.image.data.type}`
+
+  if (!map.image.data.uri.endsWith(map.image.data.type))
+    map.image.data.uri += `.${map.image.data.type}`
 
   return (
     <NavigationContainer>
