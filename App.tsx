@@ -81,8 +81,10 @@ function Globe() {
           let lastLogDate = Date.now()
           let logCount = 0
           const render = () => {
-            console.log(`first render`)
-            console.log(earth.material)
+            if (logCount === 0) {
+              console.log(`first render`)
+              console.log(earth.material)
+            }
             if (Date.now() - lastLogDate >= 6 * 1000) {
               console.log(`render ${++logCount}`)
               console.log(earth.material)
