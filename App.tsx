@@ -25,18 +25,26 @@ export default function App() {
   const map = new TextureLoader().load(
     require('./assets/globe-light-landmass-invert.png'),
     (texture) => {
-      setMapReady(texture ? true : false)
       console.log(texture)
-    }
+      setMapReady(texture ? true : false)
+    },
+    undefined,
+    (error) => void console.log(error)
   )
+
+  console.log('not ready')
 
   if (!mapReady) return null
 
-  if (!map.image.data.localUri.endsWith(map.image.data.type))
+  console.log(map)
+
+  // while (!map.image?.data?.uri) {}
+
+  if (!map.image.data.localUri?.endsWith(map.image.data.type))
     map.image.data.localUri += `.${map.image.data.type}`
 
   if (!map.image.data.uri.endsWith(map.image.data.type))
-    map.image.data.uri += `.${map.image.data.type}`
+    map.image.data.uri += `.${map.image.data?.type}`
 
   return (
     <NavigationContainer>
