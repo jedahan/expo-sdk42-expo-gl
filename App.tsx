@@ -16,8 +16,6 @@ import {
 } from 'three'
 import { useEffect } from 'react'
 
-const Drawer = createDrawerNavigator()
-
 export default function App() {
   const [mapReady, setMapReady] = useState(false)
   const drawerWidth = useWindowDimensions().width - 96
