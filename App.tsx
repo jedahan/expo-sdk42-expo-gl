@@ -64,6 +64,7 @@ function Globe() {
           scene.fog = new Fog(sceneColor, 1, 10000)
 
           const earth = new Earth()
+          console.log(earth.material)
           scene.add(earth)
 
           const ambientLight = new AmbientLight(0x101010)
@@ -80,8 +81,11 @@ function Globe() {
           let lastLogDate = Date.now()
           let logCount = 0
           const render = () => {
+            console.log(`first render`)
+            console.log(earth.material)
             if (Date.now() - lastLogDate >= 6 * 1000) {
               console.log(`render ${++logCount}`)
+              console.log(earth.material)
               lastLogDate = Date.now()
             }
             requestAnimationFrame(render)
