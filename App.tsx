@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useWindowDimensions, View, Text } from 'react-native'
+import { useWindowDimensions, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl'
@@ -15,6 +15,7 @@ import {
   SpotLight,
   Texture,
 } from 'three'
+import { useEffect } from 'react'
 
 const Drawer = createDrawerNavigator()
 
@@ -32,44 +33,19 @@ export default function App() {
     (error) => void console.log(error)
   )
 
-  console.log('not ready')
+  useEffect(() => {
+    if (!map.image?.data) return
+
+    if (!map.image.data.localUri.endsWith(map.image.data.type))
+      map.image.data.localUri += `.${map.image.data.type}`
+
+    if (!map.image.data.uri.endsWith(map.image.data.type))
+      map.image.data.uri += `.${map.image.data?.type}`
+  }, [map.image === undefined])
 
   if (!mapReady) return null
 
-  console.log(map)
-
-  // while (!map.image?.data?.uri) {}
-
-  if (!map.image.data.localUri?.endsWith(map.image.data.type))
-    map.image.data.localUri += `.${map.image.data.type}`
-
-  if (!map.image.data.uri.endsWith(map.image.data.type))
-    map.image.data.uri += `.${map.image.data?.type}`
-
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        openByDefault={true}
-        drawerContent={() => (
-          <View
-            style={{
-              flex: 1,
-              paddingVertical: 48,
-              paddingHorizontal: 18,
-              backgroundColor: 'green',
-            }}
-          >
-            <Text style={{ fontSize: 50, color: 'red' }}> drawer </Text>
-          </View>
-        )}
-        edgeWidth={0}
-        drawerStyle={{ width }}
-        screenOptions={{ unmountOnBlur: false }}
-      >
-        <Drawer.Screen name="Main">{() => Globe(map)}</Drawer.Screen>
-      </Drawer.Navigator>
-    </NavigationContainer>
-  )
+  return Globe(map)
 }
 
 function Globe(map: Texture) {
