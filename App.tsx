@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useWindowDimensions, View } from 'react-native'
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl'
 import { Renderer, TextureLoader } from 'expo-three'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 import {
   AmbientLight,
   Fog,
@@ -14,6 +15,8 @@ import {
   Texture,
 } from 'three'
 import { useEffect } from 'react'
+
+const Drawer = createDrawerNavigator()
 
 export default function App() {
   const [mapReady, setMapReady] = useState(false)
