@@ -1,4 +1,4 @@
-import { GLView } from 'expo-gl'
+import { ExpoWebGLRenderingContext, GLView } from 'expo-gl'
 import { Renderer, TextureLoader } from 'expo-three'
 import React from 'react'
 import { View } from 'react-native'
@@ -23,9 +23,9 @@ export function Globe() {
     <View style={{ flex: 1 }}>
       <GLView
         style={{ flex: 1 }}
-        onContextCreate={async (gl) => {
+        onContextCreate={(gl: ExpoWebGLRenderingContext) => {
           const { drawingBufferWidth: width, drawingBufferHeight: height } = gl
-          const sceneColor = 0x330033
+          const sceneColor = 0x667788
 
           const renderer = new Renderer({ gl })
           renderer.setSize(width, height)
@@ -41,12 +41,17 @@ export function Globe() {
           scene.add(ambientLight)
 
           const camera = new PerspectiveCamera(70, width / height, 0.01, 1000)
-          const spotLight = new SpotLight(0xff00ff, 1)
+          camera.position.set(150, 150, 150)
+          camera.lookAt(earth.position)
+          const spotLight = new SpotLight(0xffddff, 1)
+          spotLight.position.set(0, 500, 500)
           camera.add(spotLight)
           scene.add(camera)
 
           const render = () => {
             timeout = requestAnimationFrame(render)
+            earth.rotation.x += 0.005
+            earth.rotation.y += 0.0025
             renderer.render(scene, camera)
             gl.endFrameEXP()
           }
@@ -60,7 +65,7 @@ export function Globe() {
 class Earth extends Mesh {
   constructor() {
     super(
-      new SphereGeometry(2, 128, 128),
+      new SphereGeometry(100, 128, 128),
       new MeshPhongMaterial({
         map: new TextureLoader().load(require('./assets/globe-light-landmass-invert.png')),
       })
