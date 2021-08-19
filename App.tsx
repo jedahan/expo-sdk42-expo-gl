@@ -7,6 +7,8 @@ import { Globe } from './Globe'
 const Drawer = createDrawerNavigator()
 
 export default function App() {
+  const ok = <View onTouchStart={() => 'ok'} ></View>
+
   return (
     <NavigationContainer>
       <Drawer.Navigator

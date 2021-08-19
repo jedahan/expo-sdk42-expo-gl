@@ -17,7 +17,6 @@
     "expo-gl": "~10.4.2",
     "expo-status-bar": "~1.0.4",
     "expo-three": "^5.7.0",
-    "expo-three-orbit-controls": "^2.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.63.4",
