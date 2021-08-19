@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import { useWindowDimensions, View } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+import { View } from 'react-native'
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl'
 import { Renderer, TextureLoader } from 'expo-three'
 import {
@@ -17,11 +15,8 @@ import {
 } from 'three'
 import { useEffect } from 'react'
 
-const Drawer = createDrawerNavigator()
-
 export default function App() {
   const [mapReady, setMapReady] = useState(false)
-  const width = useWindowDimensions().width - 96
 
   const map = new TextureLoader().load(
     require('./assets/globe-light-landmass-invert.png'),
@@ -36,11 +31,13 @@ export default function App() {
   useEffect(() => {
     if (!map.image?.data) return
 
+    console.log('maybe adding type')
+
     if (!map.image.data.localUri.endsWith(map.image.data.type))
       map.image.data.localUri += `.${map.image.data.type}`
 
     if (!map.image.data.uri.endsWith(map.image.data.type))
-      map.image.data.uri += `.${map.image.data?.type}`
+      map.image.data.uri += `.${map.image.data.type}`
   }, [map.image === undefined])
 
   if (!mapReady) return null
@@ -108,7 +105,7 @@ function Globe(map: Texture) {
   )
 }
 
-class Earth extends Mesh {
+class Earth extends Mesh<SphereGeometry, MeshPhongMaterial> {
   constructor(map: Texture) {
     super(new SphereGeometry(100, 128, 128), new MeshPhongMaterial({ map }))
   }
