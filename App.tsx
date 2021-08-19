@@ -32,6 +32,8 @@ export default function App() {
 
   if (!mapReady) return null
 
+  return Globe(map)
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
