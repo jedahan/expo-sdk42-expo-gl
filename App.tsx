@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { useWindowDimensions, View } from 'react-native'
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl'
 import { Renderer, TextureLoader } from 'expo-three'
 import {
@@ -17,6 +17,7 @@ import { useEffect } from 'react'
 
 export default function App() {
   const [mapReady, setMapReady] = useState(false)
+  const drawerWidth = useWindowDimensions().width - 96
 
   const map = new TextureLoader().load(
     require('./assets/globe-light-landmass-invert.png'),
