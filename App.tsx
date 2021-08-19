@@ -13,11 +13,25 @@ import {
   Scene,
   SphereGeometry,
   SpotLight,
+  Texture,
 } from 'three'
 
 const Drawer = createDrawerNavigator()
 
 export default function App() {
+  const [mapReady, setMapReady] = useState(false)
+  const width = useWindowDimensions().width - 96
+
+  const map = new TextureLoader().load(
+    require('./assets/globe-light-landmass-invert.png'),
+    (texture) => {
+      setMapReady(texture ? true : false)
+      console.log(texture)
+    }
+  )
+
+  if (!mapReady) return null
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -35,16 +49,16 @@ export default function App() {
           </View>
         )}
         edgeWidth={0}
-        drawerStyle={{ width: useWindowDimensions().width - 96 }}
+        drawerStyle={{ width }}
         screenOptions={{ unmountOnBlur: false }}
       >
-        <Drawer.Screen name="Main" component={Globe} />
+        <Drawer.Screen name="Main">{() => Globe(map)}</Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   )
 }
 
-function Globe() {
+function Globe(map: Texture) {
   let contextCreate = 0
 
   return (
@@ -63,8 +77,8 @@ function Globe() {
           const scene = new Scene()
           scene.fog = new Fog(sceneColor, 1, 10000)
 
-          const earth = new Earth()
-          console.log(earth.material)
+          const earth = new Earth(map)
+          console.log(earth.material?.map?.image?.data)
           scene.add(earth)
 
           const ambientLight = new AmbientLight(0x101010)
@@ -83,11 +97,12 @@ function Globe() {
           const render = () => {
             if (logCount === 0) {
               console.log(`first render`)
-              console.log(earth.material)
+              console.log(earth.material?.map?.image?.data)
+              logCount++
             }
             if (Date.now() - lastLogDate >= 6 * 1000) {
               console.log(`render ${++logCount}`)
-              console.log(earth.material)
+              console.log(earth.material?.map?.image?.data)
               lastLogDate = Date.now()
             }
             requestAnimationFrame(render)
@@ -104,12 +119,7 @@ function Globe() {
 }
 
 class Earth extends Mesh {
-  constructor() {
-    super(
-      new SphereGeometry(100, 128, 128),
-      new MeshPhongMaterial({
-        map: new TextureLoader().load(require('./assets/globe-light-landmass-invert.png')),
-      })
-    )
+  constructor(map: Texture) {
+    super(new SphereGeometry(100, 128, 128), new MeshPhongMaterial({ map }))
   }
 }
