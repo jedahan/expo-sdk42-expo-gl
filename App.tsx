@@ -36,7 +36,7 @@ export default function App() {
         )}
         edgeWidth={0}
         drawerStyle={{ width: useWindowDimensions().width - 96 }}
-        screenOptions={{ unmountOnBlur: true }}
+        screenOptions={{ unmountOnBlur: false }}
       >
         <Drawer.Screen name="Main" component={Globe} />
       </Drawer.Navigator>
